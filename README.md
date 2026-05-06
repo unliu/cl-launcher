@@ -4,6 +4,8 @@ CLI launcher for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) a
 
 Switch between API providers / relay services in one command — no need to manually juggle environment variables or edit `~/.claude/settings.json`.
 
+[中文](README_zh.md)
+
 ## Install
 
 ```bash
