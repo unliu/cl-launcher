@@ -12,7 +12,6 @@ func TestBuildEnv_Priority(t *testing.T) {
 	os.Unsetenv("ANTHROPIC_BASE_URL")
 	os.Unsetenv("ANTHROPIC_MODEL")
 	os.Unsetenv("ANTHROPIC_AUTH_TOKEN")
-	os.Unsetenv("ANTHROPIC_SMALL_FAST_MODEL")
 	os.Unsetenv("OPENAI_API_KEY")
 	os.Unsetenv("OPENAI_BASE_URL")
 	os.Unsetenv("OPENAI_MODEL")
@@ -67,7 +66,6 @@ func TestBuildEnv_EmptyValuesSkipped(t *testing.T) {
 	os.Unsetenv("ANTHROPIC_BASE_URL")
 	os.Unsetenv("ANTHROPIC_MODEL")
 	os.Unsetenv("ANTHROPIC_AUTH_TOKEN")
-	os.Unsetenv("ANTHROPIC_SMALL_FAST_MODEL")
 	os.Unsetenv("OPENAI_API_KEY")
 	os.Unsetenv("OPENAI_BASE_URL")
 	os.Unsetenv("OPENAI_MODEL")
@@ -84,9 +82,6 @@ func TestBuildEnv_EmptyValuesSkipped(t *testing.T) {
 
 	if _, ok := envMap["ANTHROPIC_MODEL"]; ok {
 		t.Error("empty model should not be injected")
-	}
-	if _, ok := envMap["ANTHROPIC_SMALL_FAST_MODEL"]; ok {
-		t.Error("empty small_fast_model should not be injected")
 	}
 	if _, ok := envMap["ANTHROPIC_AUTH_TOKEN"]; ok {
 		t.Error("empty auth_token should not be injected")
@@ -158,8 +153,7 @@ func sortedEnv(env []string) []string {
 func TestBuildEnv_Codex(t *testing.T) {
 	for _, k := range []string{
 		"ANTHROPIC_API_KEY", "ANTHROPIC_BASE_URL", "ANTHROPIC_MODEL",
-		"ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_SMALL_FAST_MODEL",
-		"OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL",
+		"ANTHROPIC_AUTH_TOKEN", "OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL",
 	} {
 		os.Unsetenv(k)
 	}

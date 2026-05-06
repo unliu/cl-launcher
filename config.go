@@ -29,9 +29,8 @@ type Profile struct {
 	BaseURL        string            `yaml:"base_url"`
 	APIKey         string            `yaml:"api_key"`
 	AuthToken      string            `yaml:"auth_token"`
-	Model          string            `yaml:"model"`
-	SmallFastModel string            `yaml:"small_fast_model"`
-	Env            map[string]string `yaml:"env"`
+	Model string            `yaml:"model"`
+	Env   map[string]string `yaml:"env"`
 }
 
 func (p *Profile) GetCLI() string {
@@ -103,6 +102,5 @@ profiles:
     base_url: https://api.example.com
     api_key: sk-your-key-here
     model: ""
-    small_fast_model: ""
     env: {}
 `

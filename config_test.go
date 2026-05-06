@@ -24,14 +24,12 @@ profiles:
     base_url: https://www.packyapi.com
     api_key: sk-test
     model: ""
-    small_fast_model: ""
     env: {}
   hm:
     name: 红马CC
     base_url: https://hongmacc.com/api
     auth_token: sk-hongmacc-test
     model: ""
-    small_fast_model: ""
     env:
       API_TIMEOUT_MS: "600000"
 `

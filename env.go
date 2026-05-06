@@ -10,7 +10,6 @@ var conflictVars = []string{
 	"ANTHROPIC_API_KEY",
 	"ANTHROPIC_BASE_URL",
 	"ANTHROPIC_MODEL",
-	"ANTHROPIC_SMALL_FAST_MODEL",
 	"OPENAI_API_KEY",
 	"OPENAI_BASE_URL",
 	"OPENAI_MODEL",
@@ -49,11 +48,10 @@ func BuildEnv(cfg *Config, profile *Profile) []string {
 		}
 	default:
 		topLevel = map[string]string{
-			"ANTHROPIC_API_KEY":          profile.APIKey,
-			"ANTHROPIC_AUTH_TOKEN":       profile.AuthToken,
-			"ANTHROPIC_BASE_URL":         profile.BaseURL,
-			"ANTHROPIC_MODEL":            profile.Model,
-			"ANTHROPIC_SMALL_FAST_MODEL": profile.SmallFastModel,
+			"ANTHROPIC_API_KEY":    profile.APIKey,
+			"ANTHROPIC_AUTH_TOKEN": profile.AuthToken,
+			"ANTHROPIC_BASE_URL":   profile.BaseURL,
+			"ANTHROPIC_MODEL":      profile.Model,
 		}
 	}
 	for k, v := range topLevel {

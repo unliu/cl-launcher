@@ -56,7 +56,6 @@ profiles:
     base_url: https://relay.example.com
     api_key: sk-xxx
     model: claude-sonnet-4-20250514
-    small_fast_model: claude-haiku-4-5-20251001
     env: {}
 
   official:
@@ -84,7 +83,6 @@ profiles:
 | `api_key` | API key |
 | `auth_token` | Auth token (Claude only, alternative to api_key) |
 | `model` | Model override |
-| `small_fast_model` | Small/fast model override (Claude only) |
 | `env` | Extra environment variables |
 
 ### Environment Variable Mapping

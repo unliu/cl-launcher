@@ -56,7 +56,6 @@ profiles:
     base_url: https://relay.example.com
     api_key: sk-xxx
     model: claude-sonnet-4-20250514
-    small_fast_model: claude-haiku-4-5-20251001
     env: {}
 
   official:
@@ -84,7 +83,6 @@ profiles:
 | `api_key` | API Key |
 | `auth_token` | Auth Token（仅 Claude，替代 api_key） |
 | `model` | 模型覆盖 |
-| `small_fast_model` | 小型/快速模型覆盖（仅 Claude） |
 | `env` | 额外的环境变量 |
 
 ### 环境变量映射

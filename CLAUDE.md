@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 启动流程
 
 1. 解析 CLI 参数：第一个位置参数为 profile 名或子命令（list/edit/default/help 为保留字，不可用作 profile 名），`cl` 自身无任何 flag，其余参数全部透传给目标 CLI
-2. 清理冲突环境变量：`ANTHROPIC_*`（AUTH_TOKEN、API_KEY、BASE_URL、MODEL、SMALL_FAST_MODEL）和 `OPENAI_*`（API_KEY、BASE_URL、MODEL）
+2. 清理冲突环境变量：`ANTHROPIC_*`（AUTH_TOKEN、API_KEY、BASE_URL、MODEL）和 `OPENAI_*`（API_KEY、BASE_URL、MODEL）
 3. 按 profile 的 `cli` 字段决定环境变量映射：claude → `ANTHROPIC_*`，codex → `OPENAI_*`
 4. 注入配置，优先级：顶层字段 > profile.env > defaults.env
 5. 启动对应 CLI 子进程（`claude` 或 `codex`），附带透传参数
@@ -36,7 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Profile 的 `cli` 字段指定启动哪个 CLI 工具，白名单：`claude`（默认）、`codex`
 - `cli: claude` → 顶层字段映射到 `ANTHROPIC_*` 环境变量，启动 `claude` 二进制
-- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），启动 `codex` 二进制；`auth_token` 和 `small_fast_model` 对 codex 无意义，设置时被忽略
+- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），启动 `codex` 二进制；`auth_token` 对 codex 无意义，设置时被忽略
 - Codex 特有配置（如 `CODEX_CONFIG_DIR`）通过 `env` 字段注入
 
 ## 关键约束
