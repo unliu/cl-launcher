@@ -1,4 +1,4 @@
-module github.com/watchelephant/cl
+module github.com/unliu/cl-launcher
 
 go 1.26.2
 
