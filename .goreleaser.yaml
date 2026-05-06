@@ -1,0 +1,26 @@
+version: 2
+
+builds:
+  - binary: cl
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - format: tar.gz
+
+brews:
+  - repository:
+      owner: unliu
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: https://github.com/unliu/cl-launcher
+    description: CLI launcher for Claude Code / Codex with provider profiles
+    license: MIT
+    install: |
+      bin.install "cl"
