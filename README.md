@@ -1,45 +1,47 @@
-# cl
+# cl — CLI launcher for Claude Code and Codex
 
-CLI launcher for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Codex](https://github.com/openai/codex) with provider profiles.
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 和 [Codex](https://github.com/openai/codex) 的 CLI 启动器，支持 Provider 配置文件。
 
-Switch between API providers / relay services in one command — no need to manually juggle environment variables or edit `~/.claude/settings.json`.
+一条命令即可在不同 API 供应商/中转站之间切换 — 无需手动切换环境变量或修改 `~/.claude/settings.json`。
 
-[中文](README_zh.md)
+与 [CC Switch](https://github.com/farion1231/cc-switch) 各司其职：CC Switch 管理 Skills 和 MCP，`cl` 管理 Provider 认证，互不干扰，搭配使用。
 
-## Install
+[English](README_en.md)
+
+## 安装
 
 ```bash
 brew install unliu/tap/cl
 ```
 
-Or with Go:
+或使用 Go 安装：
 
 ```bash
 go install github.com/unliu/cl-launcher@latest
 ```
 
-## Quick Start
+## 快速开始
 
 ```bash
-# Create config (opens editor)
+# 创建配置（打开编辑器）
 cl edit
 
-# Set default profile
+# 设置默认 profile
 cl default myrelay
 
-# Launch Claude Code with default profile
+# 使用默认 profile 启动 Claude Code
 cl
 
-# Launch with a specific profile
+# 使用指定 profile 启动
 cl myrelay
 
-# Pass flags through to the underlying CLI
+# 透传参数到底层 CLI
 cl myrelay -r
 ```
 
-## Configuration
+## 配置
 
-Config lives at `~/.cl/profiles.yaml`:
+配置文件位于 `~/.cl/profiles.yaml`：
 
 ```yaml
 default: myrelay
@@ -72,46 +74,46 @@ profiles:
       CODEX_CONFIG_DIR: ~/.codex-envs/relay
 ```
 
-### Profile Fields
+### Profile 字段
 
-| Field | Description |
+| 字段 | 说明 |
 |---|---|
-| `name` | Display name (shown in `cl list`) |
-| `cli` | Target CLI: `claude` (default) or `codex` |
-| `base_url` | API base URL |
-| `api_key` | API key |
-| `auth_token` | Auth token (Claude only, alternative to api_key) |
-| `model` | Model override |
-| `small_fast_model` | Small/fast model override (Claude only) |
-| `env` | Extra environment variables |
+| `name` | 显示名称（在 `cl list` 中展示） |
+| `cli` | 目标 CLI：`claude`（默认）或 `codex` |
+| `base_url` | API Base URL |
+| `api_key` | API Key |
+| `auth_token` | Auth Token（仅 Claude，替代 api_key） |
+| `model` | 模型覆盖 |
+| `small_fast_model` | 小型/快速模型覆盖（仅 Claude） |
+| `env` | 额外的环境变量 |
 
-### Environment Variable Mapping
+### 环境变量映射
 
-- `cli: claude` — top-level fields map to `ANTHROPIC_*` env vars
-- `cli: codex` — top-level fields map to `OPENAI_*` env vars
+- `cli: claude` — 顶层字段映射到 `ANTHROPIC_*` 环境变量
+- `cli: codex` — 顶层字段映射到 `OPENAI_*` 环境变量
 
-### Priority
+### 优先级
 
-Top-level fields > `profile.env` > `defaults.env`
+顶层字段 > `profile.env` > `defaults.env`
 
-All conflicting `ANTHROPIC_*` and `OPENAI_*` env vars are cleared before injection to prevent auth conflicts.
+启动前会清除所有冲突的 `ANTHROPIC_*` 和 `OPENAI_*` 环境变量，防止认证冲突。
 
-## Commands
+## 命令
 
-| Command | Description |
+| 命令 | 说明 |
 |---|---|
-| `cl` | Launch with default profile |
-| `cl <profile>` | Launch with specified profile |
-| `cl <profile> [args]` | Launch with profile, pass args to CLI |
-| `cl list` | List all profiles |
-| `cl edit` | Edit profiles.yaml in `$EDITOR` |
-| `cl default [profile]` | Show or set default profile |
-| `cl help` | Show help |
+| `cl` | 使用默认 profile 启动 |
+| `cl <profile>` | 使用指定 profile 启动 |
+| `cl <profile> [args]` | 使用指定 profile 启动，透传参数 |
+| `cl list` | 列出所有 profile |
+| `cl edit` | 用 `$EDITOR` 打开 profiles.yaml |
+| `cl default [profile]` | 查看或设置默认 profile |
+| `cl help` | 显示帮助 |
 
-## Security
+## 安全性
 
-`profiles.yaml` contains API keys in plaintext, protected by `0600` file permissions. The config directory `~/.cl/` is created with `0700` permissions.
+`profiles.yaml` 明文存储 API Key，通过 `0600` 文件权限保护。配置目录 `~/.cl/` 以 `0700` 权限创建。
 
-## License
+## 许可证
 
 MIT
