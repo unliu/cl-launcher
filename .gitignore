@@ -1,0 +1,8 @@
+# Claude Code local config
+.claude/
+
+# Reference scripts containing API keys
+ref/
+
+# Private notes (separate repo)
+notes/
