@@ -15,7 +15,8 @@ archives:
   - format: tar.gz
 
 brews:
-  - repository:
+  - name: cl
+    repository:
       owner: unliu
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
