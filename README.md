@@ -1,14 +1,30 @@
+<div align="center">
+
 # cl — CLI launcher for Claude Code and Codex
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 和 [Codex](https://github.com/openai/codex) 的 CLI 启动器，支持 Provider 配置文件。
+中文 | [English](README_en.md)
 
-一条命令即可在不同 API 供应商/中转站之间切换 — 无需手动切换环境变量或修改 `~/.claude/settings.json`。
+> 一条命令切换 Claude Code / Codex 的 API 供应商配置
+
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Go Version](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go)
+
+</div>
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 和 [Codex](https://github.com/openai/codex) 的 CLI 启动器，通过 Provider 配置文件管理认证信息。
 
 与 [CC Switch](https://github.com/farion1231/cc-switch) 各司其职：CC Switch 管理 Skills 和 MCP，`cl` 管理 Provider 认证，互不干扰，搭配使用。
 
-[English](README_en.md)
+## 功能特性
+
+- 多 Provider 配置文件切换，一条命令启动不同 API 供应商
+- 支持 Claude Code 和 Codex 两种 CLI 工具
+- 通过环境变量注入配置，不修改 `~/.claude/settings.json`
+- 与 CC Switch 各司其职，管理 Skills/MCP 与 Provider 认证互不干扰
 
 ## 安装
+
+**前置条件**：已安装 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Codex](https://github.com/openai/codex)。
 
 ```bash
 brew install unliu/tap/cl
@@ -51,16 +67,37 @@ defaults:
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
 
 profiles:
-  myrelay:
-    name: My Relay
-    base_url: https://relay.example.com
-    api_key: sk-xxx
-    model: claude-sonnet-4-20250514
-    env: {}
-
-  official:
+  cc:
     name: Anthropic Direct
     api_key: sk-ant-xxx
+    env: {}
+
+  kimi:
+    name: Kimi k2.6 | https://www.kimi.com/membership/subscription
+    base_url: https://api.kimi.com/coding
+    api_key: sk-xxx
+    model: kimi-k2.6
+    env: {}
+
+  glm:
+    name: SiliconFlow GLM-5.1 | https://cloud.siliconflow.cn/me/expensebill
+    base_url: https://api.siliconflow.cn/
+    api_key: sk-xxx
+    model: Pro/zai-org/GLM-5.1
+    env: {}
+
+  ds:
+    name: DeepSeek v4-pro | https://platform.deepseek.com
+    base_url: https://api.deepseek.com/anthropic
+    api_key: sk-xxx
+    model: deepseek-v4-pro
+    env: {}
+
+  myrelay:
+    name: SomeRelay opus-4.7 | https://somerelay.example.com/bill_address
+    base_url: https://somerelay.example.com/anthropic
+    api_key: sk-xxx
+    model: claude-opus-4-7
     env: {}
 
   codex-provider:
@@ -68,7 +105,7 @@ profiles:
     cli: codex
     base_url: https://relay.example.com
     api_key: sk-xxx
-    model: o3
+    model: gpt-5.4-xhigh
     env:
       CODEX_CONFIG_DIR: ~/.codex-envs/relay
 ```
