@@ -32,6 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `cl list` | 列出所有 profile |
 | `cl edit` | 用 `$EDITOR` 打开 profiles.yaml |
 | `cl default <profile>` | 设置全局默认 profile |
+| `cl version` / `cl --version` | 显示版本 |
 
 ## 多 CLI 支持
 

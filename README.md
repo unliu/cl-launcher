@@ -146,6 +146,7 @@ profiles:
 | `cl edit` | 用 `$EDITOR` 打开 profiles.yaml |
 | `cl default [profile]` | 查看或设置默认 profile |
 | `cl help` | 显示帮助 |
+| `cl version` / `cl --version` | 显示版本 |
 
 ## 安全性
 

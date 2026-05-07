@@ -146,6 +146,7 @@ All conflicting `ANTHROPIC_*` and `OPENAI_*` env vars are cleared before injecti
 | `cl edit` | Edit profiles.yaml in `$EDITOR` |
 | `cl default [profile]` | Show or set default profile |
 | `cl help` | Show help |
+| `cl version` / `cl --version` | Show version |
 
 ## Security
 

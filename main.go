@@ -12,7 +12,10 @@ var reservedWords = map[string]bool{
 	"edit":    true,
 	"default": true,
 	"help":    true,
+	"version": true,
 }
+
+var version = "dev"
 
 func main() {
 	args := os.Args[1:]
@@ -31,6 +34,8 @@ func main() {
 		execDefault(args[1:])
 	case "help":
 		execHelp()
+	case "version", "--version", "-v":
+		execVersion()
 	default:
 		execLaunchProfile(args[0], args[1:])
 	}
@@ -182,10 +187,15 @@ func execHelp() {
   cl edit               编辑 profiles.yaml
   cl default [profile]  查看或设置默认 profile
   cl help               显示帮助
+  cl version            显示版本
 
 配置文件: ~/.cl/profiles.yaml
 支持的 CLI: claude (默认), codex
 `)
+}
+
+func execVersion() {
+	fmt.Printf("cl %s\n", version)
 }
 
 func findExecutable(name string) (string, error) {
