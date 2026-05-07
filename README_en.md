@@ -19,7 +19,7 @@ Pairs well with [CC Switch](https://github.com/farion1231/cc-switch): CC Switch 
 
 - Switch between multiple provider profiles, launch with one command
 - Support both Claude Code and Codex CLI tools
-- Inject config via environment variables, no modification to `~/.claude/settings.json`
+- Inject config via environment variables and Codex CLI config overrides, no modification to `~/.claude/settings.json`
 - Complements CC Switch: Skills/MCP management and Provider auth are independent
 
 ## Install
@@ -105,7 +105,8 @@ profiles:
     cli: codex
     base_url: https://relay.example.com
     api_key: sk-xxx
-    model: gpt-5.4-xhigh
+    model: gpt-5.5
+    model_reasoning_effort: xhigh
     env:
       CODEX_CONFIG_DIR: ~/.codex-envs/relay
 ```
@@ -120,12 +121,13 @@ profiles:
 | `api_key` | API key |
 | `auth_token` | Auth token (Claude only, alternative to api_key) |
 | `model` | Model override |
+| `model_reasoning_effort` | Codex reasoning effort override (Codex only) |
 | `env` | Extra environment variables |
 
 ### Environment Variable Mapping
 
 - `cli: claude` — top-level fields map to `ANTHROPIC_*` env vars
-- `cli: codex` — top-level fields map to `OPENAI_*` env vars
+- `cli: codex` — `api_key` still maps to `OPENAI_API_KEY`; `base_url`, `model`, and `model_reasoning_effort` are also passed as `codex -c ...` overrides. When `api_key` or `base_url` is set, `forced_login_method="api"` is added.
 
 ### Priority
 

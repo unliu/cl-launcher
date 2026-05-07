@@ -1,5 +1,6 @@
 # Build output
 cl-launcher
+.gocache/
 
 # Claude Code local config
 .claude/

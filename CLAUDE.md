@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-`cl` 是一个 CLI 工具，用于在终端内从任意项目目录启动 Claude Code 或 Codex，并自动注入对应的中转站/官方账号配置（Provider 认证）。它通过环境变量注入 API Key、Base URL、Model 等配置，不修改 `~/.claude/settings.json`，与 `cc switch`（管理 Skills 和 MCP）互不干扰。
+`cl` 是一个 CLI 工具，用于在终端内从任意项目目录启动 Claude Code 或 Codex，并自动注入对应的中转站/官方账号配置（Provider 认证）。Claude 通过环境变量注入 API Key、Base URL、Model 等配置；Codex 同时使用环境变量和 `-c` 配置覆盖来确保 Base URL、Model 等生效。不修改 `~/.claude/settings.json`，与 `cc switch`（管理 Skills 和 MCP）互不干扰。
 
 ## 核心架构
 
@@ -19,7 +19,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. 清理冲突环境变量：`ANTHROPIC_*`（AUTH_TOKEN、API_KEY、BASE_URL、MODEL）和 `OPENAI_*`（API_KEY、BASE_URL、MODEL）
 3. 按 profile 的 `cli` 字段决定环境变量映射：claude → `ANTHROPIC_*`，codex → `OPENAI_*`
 4. 注入配置，优先级：顶层字段 > profile.env > defaults.env
-5. 启动对应 CLI 子进程（`claude` 或 `codex`），附带透传参数
+5. codex profile 会把 `base_url`、`model`、`model_reasoning_effort` 额外转换为 `codex -c ...` 配置覆盖；设置了 `api_key` 或 `base_url` 时附带 `forced_login_method="api"`
+6. 启动对应 CLI 子进程（`claude` 或 `codex`），附带透传参数
 
 ### CLI 命令
 
@@ -36,7 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Profile 的 `cli` 字段指定启动哪个 CLI 工具，白名单：`claude`（默认）、`codex`
 - `cli: claude` → 顶层字段映射到 `ANTHROPIC_*` 环境变量，启动 `claude` 二进制
-- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），启动 `codex` 二进制；`auth_token` 对 codex 无意义，设置时被忽略
+- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），并额外把 `base_url`、`model`、`model_reasoning_effort` 转成 `-c openai_base_url="..."`、`-c model="..."`、`-c model_reasoning_effort="..."`；设置了 `api_key` 或 `base_url` 时附带 `-c forced_login_method="api"`；`auth_token` 对 codex 无意义，设置时被忽略
 - Codex 特有配置（如 `CODEX_CONFIG_DIR`）通过 `env` 字段注入
 
 ## 关键约束

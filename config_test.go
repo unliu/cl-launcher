@@ -146,6 +146,7 @@ func TestLoadConfig_ValidCLIs(t *testing.T) {
     name: Codex
     cli: codex
     api_key: sk-test
+    model_reasoning_effort: xhigh
   empty:
     name: Default CLI
     api_key: sk-test
@@ -161,6 +162,9 @@ func TestLoadConfig_ValidCLIs(t *testing.T) {
 	}
 	if cfg.Profiles["cx"].CLI != "codex" {
 		t.Error("expected cli=codex")
+	}
+	if cfg.Profiles["cx"].ModelReasoningEffort != "xhigh" {
+		t.Error("expected model_reasoning_effort=xhigh")
 	}
 	if cfg.Profiles["empty"].CLI != "" {
 		t.Error("expected empty cli for default")

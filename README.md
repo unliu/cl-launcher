@@ -19,7 +19,7 @@
 
 - 多 Provider 配置文件切换，一条命令启动不同 API 供应商
 - 支持 Claude Code 和 Codex 两种 CLI 工具
-- 通过环境变量注入配置，不修改 `~/.claude/settings.json`
+- 通过环境变量和 Codex CLI 配置覆盖注入配置，不修改 `~/.claude/settings.json`
 - 与 CC Switch 各司其职，管理 Skills/MCP 与 Provider 认证互不干扰
 
 ## 安装
@@ -73,7 +73,7 @@ profiles:
     env: {}
 
   kimi:
-    name: Kimi k2.6 | https://www.kimi.com/membership/subscription
+    name: Kimi k2.6 | https://www.kimi.com/code/console
     base_url: https://api.kimi.com/coding
     api_key: sk-xxx
     model: kimi-k2.6
@@ -105,7 +105,8 @@ profiles:
     cli: codex
     base_url: https://relay.example.com
     api_key: sk-xxx
-    model: gpt-5.4-xhigh
+    model: gpt-5.5
+    model_reasoning_effort: xhigh
     env:
       CODEX_CONFIG_DIR: ~/.codex-envs/relay
 ```
@@ -120,12 +121,13 @@ profiles:
 | `api_key` | API Key |
 | `auth_token` | Auth Token（仅 Claude，替代 api_key） |
 | `model` | 模型覆盖 |
+| `model_reasoning_effort` | Codex 推理强度覆盖（仅 Codex） |
 | `env` | 额外的环境变量 |
 
 ### 环境变量映射
 
 - `cli: claude` — 顶层字段映射到 `ANTHROPIC_*` 环境变量
-- `cli: codex` — 顶层字段映射到 `OPENAI_*` 环境变量
+- `cli: codex` — `api_key` 仍映射到 `OPENAI_API_KEY`；`base_url`、`model`、`model_reasoning_effort` 同时通过 `codex -c ...` 覆盖 Codex 配置，其中设置了 `api_key` 或 `base_url` 时会附带 `forced_login_method="api"`
 
 ### 优先级
 

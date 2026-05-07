@@ -36,7 +36,7 @@ func main() {
 	}
 }
 
-func execLaunchDefault(claudeArgs []string) {
+func execLaunchDefault(cliArgs []string) {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -52,12 +52,13 @@ func execLaunchDefault(claudeArgs []string) {
 		fatal("默认 profile %q 不存在，请检查配置", cfg.Default)
 	}
 	env := BuildEnv(cfg, profile)
-	if err := Launch(profile.GetCLI(), env, claudeArgs); err != nil {
+	args := BuildArgs(profile, cliArgs)
+	if err := Launch(profile.GetCLI(), env, args); err != nil {
 		fatal("%v", err)
 	}
 }
 
-func execLaunchProfile(name string, claudeArgs []string) {
+func execLaunchProfile(name string, cliArgs []string) {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -74,7 +75,8 @@ func execLaunchProfile(name string, claudeArgs []string) {
 		fatal("profile %q 不存在，可用: %s", name, strings.Join(available, ", "))
 	}
 	env := BuildEnv(cfg, profile)
-	if err := Launch(profile.GetCLI(), env, claudeArgs); err != nil {
+	args := BuildArgs(profile, cliArgs)
+	if err := Launch(profile.GetCLI(), env, args); err != nil {
 		fatal("%v", err)
 	}
 }

@@ -24,13 +24,14 @@ var validCLIs = map[string]bool{
 }
 
 type Profile struct {
-	Name           string            `yaml:"name"`
-	CLI            string            `yaml:"cli"`
-	BaseURL        string            `yaml:"base_url"`
-	APIKey         string            `yaml:"api_key"`
-	AuthToken      string            `yaml:"auth_token"`
-	Model string            `yaml:"model"`
-	Env   map[string]string `yaml:"env"`
+	Name                 string            `yaml:"name"`
+	CLI                  string            `yaml:"cli"`
+	BaseURL              string            `yaml:"base_url"`
+	APIKey               string            `yaml:"api_key"`
+	AuthToken            string            `yaml:"auth_token"`
+	Model                string            `yaml:"model"`
+	ModelReasoningEffort string            `yaml:"model_reasoning_effort"`
+	Env                  map[string]string `yaml:"env"`
 }
 
 func (p *Profile) GetCLI() string {
