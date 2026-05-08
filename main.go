@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 	"syscall"
+	"unicode/utf8"
 )
 
 var reservedWords = map[string]bool{
@@ -16,6 +18,8 @@ var reservedWords = map[string]bool{
 }
 
 var version = "dev"
+
+var urlPattern = regexp.MustCompile(`https?://[^\s<>"'` + "`" + `]+`)
 
 func main() {
 	args := os.Args[1:]
@@ -90,8 +94,84 @@ func execLaunchProfile(name string, cliArgs []string) {
 
 func printProfileName(profile *Profile) {
 	if profile.Name != "" {
-		fmt.Fprintln(os.Stderr, profile.Name)
+		name := profile.Name
+		if isTerminal(os.Stderr) {
+			name = linkURLs(name)
+		}
+		fmt.Fprintln(os.Stderr, name)
 	}
+}
+
+func isTerminal(file *os.File) bool {
+	info, err := file.Stat()
+	if err != nil {
+		return false
+	}
+	return info.Mode()&os.ModeCharDevice != 0
+}
+
+func linkURLs(text string) string {
+	urls := profileNameURLs(text)
+	if len(urls) == 0 {
+		return text
+	}
+
+	var b strings.Builder
+	last := 0
+	for _, match := range urls {
+		start, end := match.start, match.end
+		b.WriteString(text[last:start])
+		url := text[start:end]
+		b.WriteString(terminalLink(url, url))
+		last = end
+	}
+	b.WriteString(text[last:])
+	return b.String()
+}
+
+type urlMatch struct {
+	start int
+	end   int
+}
+
+func profileNameURLs(text string) []urlMatch {
+	matches := urlPattern.FindAllStringIndex(text, -1)
+	urls := make([]urlMatch, 0, len(matches))
+	for _, match := range matches {
+		start, end := match[0], trimURLMatchEnd(text, match[0], match[1])
+		if start == end {
+			continue
+		}
+		urls = append(urls, urlMatch{start: start, end: end})
+	}
+	return urls
+}
+
+func trimURLMatchEnd(text string, start, end int) int {
+	for end > start {
+		r, size := rune(text[end-1]), 1
+		if r >= 0x80 {
+			r, size = utf8.DecodeLastRuneInString(text[start:end])
+		}
+		if !strings.ContainsRune(".,;:!?)]}", r) {
+			break
+		}
+		end -= size
+	}
+	return end
+}
+
+func terminalLink(url, text string) string {
+	return "\x1b]8;;" + sanitizeTerminalLinkURL(url) + "\a" + text + "\x1b]8;;\a"
+}
+
+func sanitizeTerminalLinkURL(url string) string {
+	return strings.Map(func(r rune) rune {
+		if r < 0x20 || r == 0x7f {
+			return -1
+		}
+		return r
+	}, url)
 }
 
 func execList() {
