@@ -55,6 +55,27 @@ cl myrelay
 cl myrelay -r
 ```
 
+## Local Test Build
+
+For development or pre-release checks, build a local test binary first:
+
+```bash
+./scripts/build-local.sh
+```
+
+The default output is `dist/local/cl-dev`. The script runs `go test ./...` first, then builds a test binary with version `local`. Use it in place of the installed `cl` for smoke tests:
+
+```bash
+./dist/local/cl-dev <profile> debug models --bundled
+./dist/local/cl-dev <profile>
+```
+
+You can also choose a custom output path:
+
+```bash
+./scripts/build-local.sh /tmp/cl-dev
+```
+
 ## Configuration
 
 Config lives at `~/.cl/profiles.yaml`:
@@ -127,7 +148,7 @@ profiles:
 ### Environment Variable Mapping
 
 - `cli: claude` — top-level fields map to `ANTHROPIC_*` env vars
-- `cli: codex` — `api_key` still maps to `OPENAI_API_KEY`; `base_url`, `model`, and `model_reasoning_effort` are also passed as `codex -c ...` overrides. When `api_key` or `base_url` is set, `forced_login_method="api"` is added.
+- `cli: codex` — `api_key` maps to `OPENAI_API_KEY`; `model` and `model_reasoning_effort` are passed as `codex -c ...` overrides. When `api_key` or `base_url` is set, `cl` injects a temporary custom `model_provider` named `cl`, uses `base_url` (or `https://api.openai.com/v1` when omitted), and reads the key from `OPENAI_API_KEY` without modifying or depending on `~/.codex/auth.json`.
 
 ### Priority
 

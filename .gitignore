@@ -1,6 +1,8 @@
 # Build output
 cl-launcher
 .gocache/
+.gomodcache/
+dist/
 
 # Claude Code local config
 .claude/

@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. 清理冲突环境变量：`ANTHROPIC_*`（AUTH_TOKEN、API_KEY、BASE_URL、MODEL）和 `OPENAI_*`（API_KEY、BASE_URL、MODEL）
 3. 按 profile 的 `cli` 字段决定环境变量映射：claude → `ANTHROPIC_*`，codex → `OPENAI_*`
 4. 注入配置，优先级：顶层字段 > profile.env > defaults.env
-5. codex profile 会把 `base_url`、`model`、`model_reasoning_effort` 额外转换为 `codex -c ...` 配置覆盖；设置了 `api_key` 或 `base_url` 时附带 `forced_login_method="api"`
+5. codex profile 会把 `model`、`model_reasoning_effort` 额外转换为 `codex -c ...` 配置覆盖；设置了 `api_key` 或 `base_url` 时临时注入名为 `cl` 的自定义 `model_provider`，使用 `base_url`（未设置时为 `https://api.openai.com/v1`）并从 `OPENAI_API_KEY` 读取 key，避免触碰 `~/.codex/auth.json`
 6. 启动对应 CLI 子进程（`claude` 或 `codex`），附带透传参数
 
 ### CLI 命令
@@ -38,7 +38,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Profile 的 `cli` 字段指定启动哪个 CLI 工具，白名单：`claude`（默认）、`codex`
 - `cli: claude` → 顶层字段映射到 `ANTHROPIC_*` 环境变量，启动 `claude` 二进制
-- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），并额外把 `base_url`、`model`、`model_reasoning_effort` 转成 `-c openai_base_url="..."`、`-c model="..."`、`-c model_reasoning_effort="..."`；设置了 `api_key` 或 `base_url` 时附带 `-c forced_login_method="api"`；`auth_token` 对 codex 无意义，设置时被忽略
+- `cli: codex` → 顶层字段映射到 `OPENAI_*` 环境变量（`api_key` → `OPENAI_API_KEY`，`base_url` → `OPENAI_BASE_URL`，`model` → `OPENAI_MODEL`），并额外把 `model`、`model_reasoning_effort` 转成 `-c model="..."`、`-c model_reasoning_effort="..."`；设置了 `api_key` 或 `base_url` 时注入 `-c model_provider="cl"` 和 `-c model_providers.cl.*` 自定义 provider 配置，通过环境变量读取 key，不覆盖 Codex 登录方式；`auth_token` 对 codex 无意义，设置时被忽略
 - Codex 特有配置（如 `CODEX_CONFIG_DIR`）通过 `env` 字段注入
 
 ## 关键约束

@@ -55,6 +55,27 @@ cl myrelay
 cl myrelay -r
 ```
 
+## 本地测试版本
+
+开发或验证未发布改动时，先生成本地测试二进制：
+
+```bash
+./scripts/build-local.sh
+```
+
+默认产物为 `dist/local/cl-dev`。它会先运行 `go test ./...`，再构建版本号为 `local` 的测试二进制。可以直接用它替代系统 `cl` 做 smoke test：
+
+```bash
+./dist/local/cl-dev <profile> debug models --bundled
+./dist/local/cl-dev <profile>
+```
+
+也可以指定输出路径：
+
+```bash
+./scripts/build-local.sh /tmp/cl-dev
+```
+
 ## 配置
 
 配置文件位于 `~/.cl/profiles.yaml`：
@@ -127,7 +148,7 @@ profiles:
 ### 环境变量映射
 
 - `cli: claude` — 顶层字段映射到 `ANTHROPIC_*` 环境变量
-- `cli: codex` — `api_key` 仍映射到 `OPENAI_API_KEY`；`base_url`、`model`、`model_reasoning_effort` 同时通过 `codex -c ...` 覆盖 Codex 配置，其中设置了 `api_key` 或 `base_url` 时会附带 `forced_login_method="api"`
+- `cli: codex` — `api_key` 映射到 `OPENAI_API_KEY`；`model`、`model_reasoning_effort` 通过 `codex -c ...` 覆盖 Codex 配置；设置了 `api_key` 或 `base_url` 时会临时注入一个名为 `cl` 的自定义 `model_provider`，使用 `base_url`（未设置时为 `https://api.openai.com/v1`）并从 `OPENAI_API_KEY` 读取 key，不修改也不依赖 `~/.codex/auth.json`
 
 ### 优先级
 
