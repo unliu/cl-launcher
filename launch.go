@@ -9,7 +9,7 @@ import (
 func Launch(cli string, env []string, args []string) error {
 	binPath, err := exec.LookPath(cli)
 	if err != nil {
-		return fmt.Errorf("%s 未找到，请确认已安装并在 PATH 中", cli)
+		return fmt.Errorf(tr(msgCLINotFound), cli)
 	}
 	argv := append([]string{cli}, args...)
 	return syscall.Exec(binPath, argv, env)
