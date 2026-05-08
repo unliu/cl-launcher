@@ -58,6 +58,7 @@ func execLaunchDefault(cliArgs []string) {
 	}
 	env := BuildEnv(cfg, profile)
 	args := BuildArgs(profile, cliArgs)
+	printProfileName(profile)
 	if err := Launch(profile.GetCLI(), env, args); err != nil {
 		fatal("%v", err)
 	}
@@ -81,8 +82,15 @@ func execLaunchProfile(name string, cliArgs []string) {
 	}
 	env := BuildEnv(cfg, profile)
 	args := BuildArgs(profile, cliArgs)
+	printProfileName(profile)
 	if err := Launch(profile.GetCLI(), env, args); err != nil {
 		fatal("%v", err)
+	}
+}
+
+func printProfileName(profile *Profile) {
+	if profile.Name != "" {
+		fmt.Fprintln(os.Stderr, profile.Name)
 	}
 }
 
