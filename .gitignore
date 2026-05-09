@@ -6,6 +6,8 @@ dist/
 
 # Claude Code local config
 .claude/
+CLAUDE.md
+AGENTS.md
 
 # Reference scripts containing API keys
 ref/
