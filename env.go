@@ -42,9 +42,7 @@ func BuildEnv(cfg *Config, profile *Profile) []string {
 	switch profile.GetCLI() {
 	case "codex":
 		topLevel = map[string]string{
-			"OPENAI_API_KEY":  profile.APIKey,
-			"OPENAI_BASE_URL": profile.BaseURL,
-			"OPENAI_MODEL":    profile.Model,
+			"OPENAI_API_KEY": profile.APIKey,
 		}
 	default:
 		topLevel = map[string]string{

@@ -181,11 +181,11 @@ func TestBuildEnv_Codex(t *testing.T) {
 	if envMap["OPENAI_API_KEY"] != "aicoding-xxx" {
 		t.Errorf("expected OPENAI_API_KEY=aicoding-xxx, got %q", envMap["OPENAI_API_KEY"])
 	}
-	if envMap["OPENAI_BASE_URL"] != "https://api.aicoding.sh" {
-		t.Errorf("expected OPENAI_BASE_URL, got %q", envMap["OPENAI_BASE_URL"])
+	if _, ok := envMap["OPENAI_BASE_URL"]; ok {
+		t.Error("codex profile should not set OPENAI_BASE_URL (handled via -c args)")
 	}
-	if envMap["OPENAI_MODEL"] != "o3" {
-		t.Errorf("expected OPENAI_MODEL=o3, got %q", envMap["OPENAI_MODEL"])
+	if _, ok := envMap["OPENAI_MODEL"]; ok {
+		t.Error("codex profile should not set OPENAI_MODEL (handled via -c args)")
 	}
 	if envMap["CODEX_CONFIG_DIR"] != "~/.codex-envs/mirror" {
 		t.Errorf("expected CODEX_CONFIG_DIR, got %q", envMap["CODEX_CONFIG_DIR"])
