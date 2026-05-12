@@ -12,5 +12,6 @@ AGENTS.md
 # Reference scripts containing API keys
 ref/
 
-# Private notes (separate repo)
+# Private notes (symlink to ~/ob/sync/projects/cl)
+notes
 notes/
