@@ -15,6 +15,7 @@ var reservedWords = map[string]bool{
 	"default": true,
 	"help":    true,
 	"version": true,
+	"init":    true,
 }
 
 var version = "dev"
@@ -30,6 +31,8 @@ func main() {
 	}
 
 	switch args[0] {
+	case "init":
+		execInit()
 	case "list":
 		execList()
 	case "edit":
@@ -49,7 +52,7 @@ func execLaunchDefault(cliArgs []string) {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			fatal(tr(msgConfigMissing))
+			fatal(tr(msgConfigMissingInit))
 		}
 		fatal(tr(msgLoadConfigFailed), err)
 	}
@@ -72,7 +75,7 @@ func execLaunchProfile(name string, cliArgs []string) {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			fatal(tr(msgConfigMissing))
+			fatal(tr(msgConfigMissingInit))
 		}
 		fatal(tr(msgLoadConfigFailed), err)
 	}
@@ -178,7 +181,7 @@ func execList() {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			fatal(tr(msgConfigMissing))
+			fatal(tr(msgConfigMissingInit))
 		}
 		fatal(tr(msgLoadConfigFailed), err)
 	}
@@ -252,7 +255,7 @@ func execDefault(args []string) {
 	cfg, err := LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			fatal(tr(msgConfigMissing))
+			fatal(tr(msgConfigMissingInit))
 		}
 		fatal(tr(msgLoadConfigFailed), err)
 	}

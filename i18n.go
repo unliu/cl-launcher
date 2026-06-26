@@ -31,6 +31,21 @@ const (
 	msgProfileMissing          messageID = "profile_missing"
 	msgCLINotFound             messageID = "cli_not_found"
 	msgExecutableNotFound      messageID = "executable_not_found"
+
+	msgConfigMissingInit    messageID = "config_missing_init"
+	msgInitHeader           messageID = "init_header"
+	msgInitPromptProfile    messageID = "init_prompt_profile"
+	msgInitPromptCLI        messageID = "init_prompt_cli"
+	msgInitPromptAPIKey     messageID = "init_prompt_api_key"
+	msgInitPromptBaseURL    messageID = "init_prompt_base_url"
+	msgInitPromptModel      messageID = "init_prompt_model"
+	msgInitPromptSetDefault messageID = "init_prompt_set_default"
+	msgInitProfileExists    messageID = "init_profile_exists"
+	msgInitInvalidChoice    messageID = "init_invalid_choice"
+	msgInitRequired         messageID = "init_required"
+	msgInitSuccess          messageID = "init_success"
+	msgInitSuccessDefault   messageID = "init_success_default"
+	msgInitNotInteractive   messageID = "init_not_interactive"
 )
 
 var localizedMessages = map[string]map[messageID]string{
@@ -40,7 +55,7 @@ var localizedMessages = map[string]map[messageID]string{
 		msgDefaultNotSet:           "default profile is not set, use cl <profile> or cl default <profile>",
 		msgDefaultProfileMissing:   "default profile %q does not exist, please check your config",
 		msgProfileMissingAvailable: "profile %q does not exist, available: %s",
-		msgNoProfiles:              "no profiles yet, run cl edit to add one",
+		msgNoProfiles:              "no profiles yet, run cl init or cl edit to add one",
 		msgDefaultMarker:           "(default)",
 		msgCreatedTemplate:         "created template config: %s",
 		msgCreateConfigDirFailed:   "failed to create config directory: %v",
@@ -58,6 +73,7 @@ Usage:
   cl                    Launch with the default profile
   cl <profile>          Launch with a specific profile
   cl <profile> [args]   Launch with a specific profile and pass args to the CLI
+  cl init               Interactive setup
   cl list               List all profiles
   cl edit               Edit profiles.yaml
   cl default [profile]  Show or set the default profile
@@ -72,6 +88,21 @@ Supported CLIs: claude (default), codex
 		msgProfileMissing:     "profile %q does not exist",
 		msgCLINotFound:        "%s not found, please install it and make sure it is in PATH",
 		msgExecutableNotFound: "%s not found in PATH",
+
+		msgConfigMissingInit:    "config file not found, run cl init for interactive setup or cl edit to create manually",
+		msgInitHeader:           "cl - Interactive setup",
+		msgInitPromptProfile:    "Profile name",
+		msgInitPromptCLI:        "CLI (claude/codex)",
+		msgInitPromptAPIKey:     "API Key",
+		msgInitPromptBaseURL:    "Base URL",
+		msgInitPromptModel:      "Model",
+		msgInitPromptSetDefault: "Set as default? (y/n)",
+		msgInitProfileExists:    "profile %q already exists, choose a different name",
+		msgInitInvalidChoice:    "invalid choice, must be one of: %s",
+		msgInitRequired:         "this field is required",
+		msgInitSuccess:          "profile %q created, config saved to %s",
+		msgInitSuccessDefault:   "profile %q created and set as default, config saved to %s",
+		msgInitNotInteractive:   "cl init requires an interactive terminal",
 	},
 	"zh": {
 		msgConfigMissing:           "配置文件不存在，请运行 cl edit 创建",
@@ -79,7 +110,7 @@ Supported CLIs: claude (default), codex
 		msgDefaultNotSet:           "未设置默认 profile，请使用 cl <profile> 或 cl default <profile>",
 		msgDefaultProfileMissing:   "默认 profile %q 不存在，请检查配置",
 		msgProfileMissingAvailable: "profile %q 不存在，可用: %s",
-		msgNoProfiles:              "暂无 profile，请运行 cl edit 添加",
+		msgNoProfiles:              "暂无 profile，请运行 cl init 或 cl edit 添加",
 		msgDefaultMarker:           "(默认)",
 		msgCreatedTemplate:         "已创建模板配置: %s",
 		msgCreateConfigDirFailed:   "创建配置目录失败: %v",
@@ -97,6 +128,7 @@ Supported CLIs: claude (default), codex
   cl                    使用默认 profile 启动
   cl <profile>          指定 profile 启动
   cl <profile> [args]   指定 profile，透传参数给 CLI
+  cl init               交互式配置
   cl list               列出所有 profile
   cl edit               编辑 profiles.yaml
   cl default [profile]  查看或设置默认 profile
@@ -111,6 +143,21 @@ Supported CLIs: claude (default), codex
 		msgProfileMissing:     "profile %q 不存在",
 		msgCLINotFound:        "%s 未找到，请确认已安装并在 PATH 中",
 		msgExecutableNotFound: "%s 不在 PATH 中",
+
+		msgConfigMissingInit:    "配置文件不存在，运行 cl init 交互创建或 cl edit 手动创建",
+		msgInitHeader:           "cl - 交互式配置",
+		msgInitPromptProfile:    "Profile 名称",
+		msgInitPromptCLI:        "CLI 工具 (claude/codex)",
+		msgInitPromptAPIKey:     "API Key",
+		msgInitPromptBaseURL:    "Base URL",
+		msgInitPromptModel:      "Model",
+		msgInitPromptSetDefault: "设为默认？(y/n)",
+		msgInitProfileExists:    "profile %q 已存在，请选择其他名称",
+		msgInitInvalidChoice:    "无效选择，必须是: %s",
+		msgInitRequired:         "此字段为必填",
+		msgInitSuccess:          "profile %q 已创建，配置已保存到 %s",
+		msgInitSuccessDefault:   "profile %q 已创建并设为默认，配置已保存到 %s",
+		msgInitNotInteractive:   "cl init 需要在交互终端中运行",
 	},
 }
 
