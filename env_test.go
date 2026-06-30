@@ -224,6 +224,103 @@ func TestBuildEnv_CodexClearsAnthropicVars(t *testing.T) {
 	}
 }
 
+func TestBuildEnv_LoopbackNoProxy(t *testing.T) {
+	for _, k := range conflictVars {
+		os.Unsetenv(k)
+	}
+	os.Unsetenv("no_proxy")
+	os.Unsetenv("NO_PROXY")
+
+	cfg := &Config{}
+	profile := &Profile{
+		CLI:     "codex",
+		BaseURL: "http://127.0.0.1:8317/v1",
+		APIKey:  "sk-test",
+	}
+
+	env := BuildEnv(cfg, profile)
+	envMap := envToMap(env)
+
+	noProxy := envMap["no_proxy"]
+	for _, want := range []string{"127.0.0.1", "localhost"} {
+		if !containsNoProxyEntry(noProxy, want) {
+			t.Errorf("no_proxy should contain %q, got %q", want, noProxy)
+		}
+	}
+}
+
+func TestBuildEnv_LoopbackNoProxy_Localhost(t *testing.T) {
+	for _, k := range conflictVars {
+		os.Unsetenv(k)
+	}
+	os.Unsetenv("no_proxy")
+	os.Unsetenv("NO_PROXY")
+
+	cfg := &Config{}
+	profile := &Profile{
+		BaseURL: "http://localhost:9000",
+		APIKey:  "sk-test",
+	}
+
+	env := BuildEnv(cfg, profile)
+	envMap := envToMap(env)
+
+	noProxy := envMap["no_proxy"]
+	for _, want := range []string{"localhost", "127.0.0.1", "::1"} {
+		if !containsNoProxyEntry(noProxy, want) {
+			t.Errorf("no_proxy should contain %q, got %q", want, noProxy)
+		}
+	}
+}
+
+func TestBuildEnv_LoopbackNoProxy_PreservesExisting(t *testing.T) {
+	for _, k := range conflictVars {
+		os.Unsetenv(k)
+	}
+	os.Setenv("no_proxy", "example.com")
+	defer os.Unsetenv("no_proxy")
+	os.Unsetenv("NO_PROXY")
+
+	cfg := &Config{}
+	profile := &Profile{
+		CLI:     "codex",
+		BaseURL: "http://127.0.0.1:8317/v1",
+		APIKey:  "sk-test",
+	}
+
+	env := BuildEnv(cfg, profile)
+	envMap := envToMap(env)
+
+	noProxy := envMap["no_proxy"]
+	if !strings.Contains(noProxy, "example.com") {
+		t.Errorf("no_proxy should preserve existing entries, got %q", noProxy)
+	}
+	if !containsNoProxyEntry(noProxy, "127.0.0.1") {
+		t.Errorf("no_proxy should contain 127.0.0.1, got %q", noProxy)
+	}
+}
+
+func TestBuildEnv_RemoteURL_NoNoProxy(t *testing.T) {
+	for _, k := range conflictVars {
+		os.Unsetenv(k)
+	}
+	os.Unsetenv("no_proxy")
+	os.Unsetenv("NO_PROXY")
+
+	cfg := &Config{}
+	profile := &Profile{
+		BaseURL: "https://api.example.com",
+		APIKey:  "sk-test",
+	}
+
+	env := BuildEnv(cfg, profile)
+	envMap := envToMap(env)
+
+	if _, ok := envMap["no_proxy"]; ok {
+		t.Error("remote base_url should not inject no_proxy")
+	}
+}
+
 func TestBuildEnv_DefaultCLIIsClaude(t *testing.T) {
 	os.Unsetenv("ANTHROPIC_API_KEY")
 	os.Unsetenv("OPENAI_API_KEY")

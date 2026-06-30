@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net"
+	"net/url"
 	"os"
 	"strings"
 )
@@ -58,9 +60,67 @@ func BuildEnv(cfg *Config, profile *Profile) []string {
 		}
 	}
 
+	if isLoopback(profile.BaseURL) {
+		addNoProxy(env, profile.BaseURL)
+	}
+
 	result := make([]string, 0, len(env))
 	for k, v := range env {
 		result = append(result, k+"="+v)
 	}
 	return result
+}
+
+func isLoopback(baseURL string) bool {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return false
+	}
+	host := u.Hostname()
+	if host == "localhost" {
+		return true
+	}
+	ip := net.ParseIP(host)
+	return ip != nil && ip.IsLoopback()
+}
+
+func addNoProxy(env map[string]string, baseURL string) {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return
+	}
+	host := u.Hostname()
+
+	targets := []string{host}
+	if host == "localhost" {
+		targets = append(targets, "127.0.0.1", "::1")
+	} else if host == "127.0.0.1" || host == "::1" {
+		targets = append(targets, "localhost")
+	}
+
+	for _, key := range []string{"no_proxy", "NO_PROXY"} {
+		existing := env[key]
+		var missing []string
+		for _, t := range targets {
+			if !containsNoProxyEntry(existing, t) {
+				missing = append(missing, t)
+			}
+		}
+		if len(missing) > 0 {
+			if existing != "" {
+				env[key] = existing + "," + strings.Join(missing, ",")
+			} else {
+				env[key] = strings.Join(missing, ",")
+			}
+		}
+	}
+}
+
+func containsNoProxyEntry(noProxy, entry string) bool {
+	for _, e := range strings.Split(noProxy, ",") {
+		if strings.TrimSpace(e) == entry {
+			return true
+		}
+	}
+	return false
 }
